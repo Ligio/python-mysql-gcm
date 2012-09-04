@@ -23,7 +23,7 @@ Usage
 ------------
 Now, your database has 2 tables:
 * Push_Android          (you've to collect devices registration Id here)
-* Push_Android_Check    (utility table to prevent to much push!)
+* Push_Android_Check    (utility table to prevent too much push!)
 
 You can register your device by manually insert registrationId into Push_Android table or you can implement your registration logic.
 You can now execute ./send_test_push.py to send a test push to your device!

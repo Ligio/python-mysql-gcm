@@ -4,20 +4,23 @@ python-gcm
 
 Python client for Google Cloud Messaging for Android (GCM)
 
-Usage
+Google GCM doc
 ------------
 RTFM [here](http://developer.android.com/guide/google/gcm/gcm.html)
         
-Basic
+Project Description
+------------
 This is a Fork of python-gcm [https://github.com/geeknam/python-gcm].
 Python-gcm library by geeknam is a single part of the Server Application you need to send messages with Google Cloud Messaging.
 With this fork you can create the database to store deviceIds and you'll have the ability to send broadcast messages to all devices.
 
 Setup
+------------
 * create a mysql database and import the script setup_mysql.sql (this script will create mysql tables for you!)
 * open the file gcm/gcm_setup.py and change settings with your mysql and GCM credentials
 
 Usage
+------------
 Now, your database has 2 tables:
 * Push_Android          (you've to collect devices registration Id here)
 * Push_Android_Check    (utility table to prevent to much push!)

@@ -9,77 +9,22 @@ Usage
 RTFM [here](http://developer.android.com/guide/google/gcm/gcm.html)
         
 Basic
-```python
-gcm = GCM(API_KEY)
-data = {'param1': 'value1', 'param2': 'value2'}
+This is a Fork of python-gcm [https://github.com/geeknam/python-gcm].
+Python-gcm library by geeknam is a single part of the Server Application you need to send messages with Google Cloud Messaging.
+With this fork you can create the database to store deviceIds and you'll have the ability to send broadcast messages to all devices.
 
-# Plaintext request
-gcm.plaintext_request(registration_id=reg_id, data=data)
+Setup
+* create a mysql database and import the script setup_mysql.sql (this script will create mysql tables for you!)
+* open the file gcm/gcm_setup.py and change settings with your mysql and GCM credentials
 
-# JSON request
-reg_ids = ['12', '34', '69']
-response = gcm.json_request(registration_ids=reg_ids, data=data)
+Usage
+Now, your database has 2 tables:
+* Push_Android          (you've to collect devices registration Id here)
+* Push_Android_Check    (utility table to prevent to much push!)
 
-# Extra arguments
-res = gcm.json_request(
-    registration_ids=reg_ids, data=data,
-    collapse_key='uptoyou', delay_while_idle=True, time_to_live=3600
-)
-```
+You can register your device by manually insert registrationId into Push_Android table or you can implement your registration logic.
+You can now execute ./send_test_push.py to send a test push to your device!
 
-Error handling
-```python
-# Plaintext request
-reg_id = '12345'
-try:
-    canonical_id = gcm.plaintext_request(registration_id=reg_id, data=data)
-    if canonical_id:
-        # Repace reg_id with canonical_id in your database
-        entry = entity.filter(registration_id=reg_id)
-        entry.registration_id = canonical_id
-        entry.save()
-except GCMNotRegisteredException:
-    # Remove this reg_id from database
-    entity.filter(registration_id=reg_id).delete()
-except GCMUnavailableException:
-    # Resent the message
-
-# JSON request
-reg_ids = ['12', '34', '69']
-response = gcm.json_request(registration_ids=reg_ids, data=data)
-
-# Handling errors
-if 'errors' in response:
-    for error, reg_ids in response['errors'].items():
-        # Check for errors and act accordingly
-        if error is 'NotRegistered':
-            # Remove reg_ids from database
-            for reg_id in reg_ids:
-                entity.filter(registration_id=reg_id).delete()
-if 'canonical' in response:
-    for canonical_id, reg_id in response['canonical'].items():
-        # Repace reg_id with canonical_id in your database
-        entry = entity.filter(registration_id=reg_id)
-        entry.registration_id = canonical_id
-        entry.save()
-```
-
-Exceptions
-------------
-Read more on response errors [here](http://developer.android.com/guide/google/gcm/gcm.html#success)
+If you execute ./push_gcm.py the script will check Push_Android_Check table and if it will find a record with 'on' status, the push will be sent to all enabled devices.
 
 
-* GCMMalformedJsonException
-* GCMConnectionException
-* GCMAuthenticationException
-* GCMTooManyRegIdsException
-* GCMNoCollapseKeyException
-* GCMInvalidTtlException
-* GCMMissingRegistrationException
-* GCMMismatchSenderIdException
-* GCMNotRegisteredException
-* GCMMessageTooBigException
-* GCMInvalidRegistrationException
-* GCMUnavailableException
-
-![Gotta catch them all](http://t.qkme.me/35gjhs.jpg)

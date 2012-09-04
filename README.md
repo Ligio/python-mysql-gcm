@@ -1,4 +1,4 @@
-python-gcm
+python-mysql-gcm
 ======================
 [![Build Status](https://secure.travis-ci.org/geeknam/python-gcm.png?branch=master)](http://travis-ci.org/geeknam/python-gcm)
 
